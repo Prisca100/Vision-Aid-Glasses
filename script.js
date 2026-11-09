@@ -115,11 +115,13 @@ async function startCamera() {
         canvas.height = video.videoHeight;
 
         status.textContent = 'Camera Running';
+        button.textContent = 'Stop Camera';
         if (session) {
             detecting = true;
             detectionLoop();
         } else {
             status.textContent = 'Camera running, YOLO not loaded';
+            
         }
 
     }catch(error){
@@ -129,7 +131,7 @@ async function startCamera() {
             }
             video.srcObject = null;
             status.textContent = 'Camera error: ' + error.message;
-            button.textContent = 'Start Detection';
+            button.textContent = 'Find item';
         } finally {
             button.disabled = false;
         }
@@ -149,7 +151,7 @@ function stopCamera() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     status.textContent = 'Camera Not Started';
-    button.textContent = 'Start Detection';
+    button.textContent = 'Find item';
 }
 
 async function detectObjects() {
@@ -173,7 +175,13 @@ async function detectObjects() {
         padY
     );
 
-    drawDetections(detections);
+    const targetClass = getTargetClass();
+
+    const filteredDetections = detections.filter(
+        d => d.classId === targetClass
+    );
+
+    drawDetections(filteredDetections);
 }
 
 const CONF_THRESHOLD = 0.4;
@@ -292,6 +300,33 @@ async function detectionLoop() {
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 }
+
+const objectInput = document.getElementById('object-input');
+function getTargetClass() {
+    const input = objectInput.value.trim().toLowerCase();
+
+    return CLASS_NAMES.findIndex(
+        name => name.toLowerCase() === input
+    );
+}
+
+function getTargetClass() {
+    const input = objectInput.value.trim().toLowerCase();
+
+    const aliases = {
+        'phone': 'cell phone',
+        'mobile': 'cell phone',
+        'mobile phone': 'cell phone'
+    };
+
+    const target = aliases[input] || input;
+
+    return CLASS_NAMES.findIndex(
+        name => name.toLowerCase() === target
+    );
+}
+
+
 
 // function drawBoundingBoxes() {
 //     ctx.clearRect(

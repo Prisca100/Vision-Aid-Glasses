@@ -37,12 +37,52 @@
             font-size: 16px;
         }
 
+        .object-input-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: column;
+            gap: 8px;
+            margin: 15px auto;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .object-input-container label {
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .object-input-container input {
+            padding: 12px;
+            font-size: 16px;
+            color: #222;
+            background: white;
+            border: 2px solid #555;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .object-input-container input:focus {
+            border-color: #007bff;
+        }
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
 </head>
 <body>
     <h1>Simple Object Detection</h1>
-    <button id="start-button">Start Detection</button>
+    <div class="object-input-container">
+        <label for="object-input">Enter the item you wish to find</label>
+        <input
+            type="text"
+            id="object-input"
+            placeholder="e.g. phone, person, bottle"
+        />
+        <button id="start-button">Find Item</button>
+    </div>
+    
 
     <div id="camera-feed-container">
         <video id="video" autoplay playsinline></video>
