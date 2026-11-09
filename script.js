@@ -176,11 +176,14 @@ async function detectObjects() {
     );
 
     const targetClass = getTargetClass();
-
-    const filteredDetections = detections.filter(
-        d => d.classId === targetClass
-    );
-
+    let filteredDetections;
+    if( targetClass === -1) {
+        filteredDetections = detections;
+    }else {
+        filteredDetections = detections.filter(
+            d => d.classId === targetClass
+        );
+    }
     drawDetections(filteredDetections);
 }
 
