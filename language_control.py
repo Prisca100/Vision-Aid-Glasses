@@ -28,11 +28,14 @@ class LanguageModel:
 
     def transcribe_voice(self) -> str:
         recognizer = sr.Recognizer()
+        recognizer.pause_threshold = 0.6
         try:
             with sr.Microphone() as source:
+                print("Calibrating microphone; please stay quiet...")
+                recognizer.adjust_for_ambient_noise(source, duration=2)
                 print("Listening for your command...")
-                recognizer.adjust_for_ambient_noise(source, duration=0.5)
                 audio = recognizer.listen(source, timeout=5, phrase_time_limit=10)
+            print("Transcribing...")
             transcript = recognizer.recognize_google(audio)
         except sr.WaitTimeoutError as exc:
             raise VoiceTranscriptionError("No speech detected within 5 seconds.") from exc
