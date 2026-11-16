@@ -15,7 +15,7 @@ class VoiceTranscriptionError(RuntimeError):
 
 class LanguageModel:
     def __init__(self) -> None:
-        api_key = os.getenv("GOOGLE_API_KEY")
+        api_key = os.getenv("KEY_VOICE")
         if not api_key:
             raise ValueError(
                 "GOOGLE_API_KEY is not set. Set it in the server's environment."
@@ -88,7 +88,7 @@ class LanguageModel:
         return target_class
 
 
-def main():
+def language_():
     classes = ["keys/fob","wallet","earbuds","remote","glasses","ID card"] #for testing only
     model = LanguageModel()
     user_input = model.transcribe_voice()
@@ -96,9 +96,10 @@ def main():
     item = model.find_target(user_input,classes)
     if item in classes:
         print(f"item to find: {item}")
+        return item
     else:
         print("No valid item found in the request, this model is currently trained to recognize only the following classes: " + str(classes))
-
+        return None
 
 if __name__ == "__main__":
-    main()
+    language_()

@@ -329,6 +329,33 @@ function getTargetClass() {
     );
 }
 
+async function getReccog(){
+    const mic_btn = document.getElementById("mic")
+
+
+    const resp = await fetch("http://127.0.0.1:8000/recog")
+    const data = await resp.json()
+    console.log(data)
+}
+
+function setupMicrophone() {
+    const button = document.getElementById("mic");
+
+    button.addEventListener("click", async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: true
+            });
+
+            console.log("Microphone started");
+
+        } catch (error) {
+            console.error("Microphone access failed:", error);
+        }
+    });
+}
+
+setupMicrophone();
 
 
 // function drawBoundingBoxes() {
